@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -23,7 +24,7 @@ public class Board {
     String name;
 
     @Column(nullable = false)
-    Long ownerId;
+    UUID ownerId;
 
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt = LocalDateTime.now();
