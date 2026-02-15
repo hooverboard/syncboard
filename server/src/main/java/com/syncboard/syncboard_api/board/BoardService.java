@@ -1,11 +1,16 @@
 package com.syncboard.syncboard_api.board;
 
+import com.syncboard.syncboard_api.board.dto.BoardSummaryResponse;
+import com.syncboard.syncboard_api.board.dto.CreateBoardResponse;
 import com.syncboard.syncboard_api.user.User;
 import com.syncboard.syncboard_api.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
@@ -16,7 +21,7 @@ public class BoardService {
     @Autowired
     UserRepository userRepository;
 
-    public void createBoard(String name) {
+    public CreateBoardResponse createBoard(String name) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = (String) auth.getPrincipal();
@@ -28,6 +33,25 @@ public class BoardService {
         newBoard.setName(name);
 
         newBoard.setOwnerId(user.getId());
-        boardRepository.save(newBoard);
+        Board savedBoard = boardRepository.save(newBoard);
+
+        CreateBoardResponse res = new CreateBoardResponse();
+        res.setId(savedBoard.getId());
+        res.setName(savedBoard.getName());
+        res.setOwnerId(savedBoard.getOwnerId());
+
+        return res;
+    }
+
+    public List<BoardSummaryResponse> getAllBoards() {
+
+        return boardRepository.findAll()
+                .stream()
+                .map(board -> new BoardSummaryResponse(
+                        board.getId(),
+                        board.getName(),
+                        board.getOwnerId()
+                ))
+                .collect(Collectors.toList());
     }
 }
