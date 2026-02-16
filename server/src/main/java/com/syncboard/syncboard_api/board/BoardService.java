@@ -1,6 +1,8 @@
 package com.syncboard.syncboard_api.board;
 
-import com.syncboard.syncboard_api.board.dto.BoardSummaryResponse;
+import com.syncboard.syncboard_api.board.dto.GetBoardByIdResponse;
+import com.syncboard.syncboard_api.board.dto.GetBoardStateResponse;
+import com.syncboard.syncboard_api.board.dto.GetBoardsResponse;
 import com.syncboard.syncboard_api.board.dto.CreateBoardResponse;
 import com.syncboard.syncboard_api.user.User;
 import com.syncboard.syncboard_api.user.UserRepository;
@@ -43,15 +45,30 @@ public class BoardService {
         return res;
     }
 
-    public List<BoardSummaryResponse> getAllBoards() {
+    public List<GetBoardsResponse> getAllBoards() {
 
         return boardRepository.findAll()
                 .stream()
-                .map(board -> new BoardSummaryResponse(
+                .map(board -> new GetBoardsResponse(
                         board.getId(),
                         board.getName(),
                         board.getOwnerId()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public GetBoardByIdResponse getBoardById(Long id) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Board not found"));
+
+        GetBoardByIdResponse res = new GetBoardByIdResponse();
+        res.setId(board.getId());
+        res.setName(board.getName());
+        res.setOwnerId(board.getOwnerId());
+        return res;
+    }
+
+    public GetBoardStateResponse getBoardState(Long id) {
+
     }
 }

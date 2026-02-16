@@ -1,6 +1,7 @@
 package com.syncboard.syncboard_api.board;
 
-import com.syncboard.syncboard_api.board.dto.BoardSummaryResponse;
+import com.syncboard.syncboard_api.board.dto.GetBoardByIdResponse;
+import com.syncboard.syncboard_api.board.dto.GetBoardsResponse;
 import com.syncboard.syncboard_api.board.dto.CreateBoardRequest;
 import com.syncboard.syncboard_api.board.dto.CreateBoardResponse;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,12 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BoardSummaryResponse>> getAllBoards() {
+    public ResponseEntity<List<GetBoardsResponse>> getAllBoards() {
         return ResponseEntity.ok(boardService.getAllBoards());
+    }
+
+    @GetMapping("/{boardId}")
+    public ResponseEntity<GetBoardByIdResponse> getBoardById(@PathVariable Long boardId) {
+        return ResponseEntity.ok(boardService.getBoardById(boardId));
     }
 }
