@@ -1,2 +1,8 @@
-com/syncboard/syncboard_api/board/dto/BoardSummaryResponse.class
+com/syncboard/syncboard_api/board/dto/GetBoardsResponse.class
+com/syncboard/syncboard_api/board/dto/GetBoardByIdResponse.class
+com/syncboard/syncboard_api/board/dto/UpdateBoardStateRequest.class
+com/syncboard/syncboard_api/realtime/BoardRealtimeController.class
+com/syncboard/syncboard_api/realtime/WebSocketConfig.class
+com/syncboard/syncboard_api/realtime/JoinBoardMessage.class
 com/syncboard/syncboard_api/SyncboardApiApplication.class
+com/syncboard/syncboard_api/board/dto/GetBoardStateResponse.class

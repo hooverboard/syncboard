@@ -1,9 +1,7 @@
 package com.syncboard.syncboard_api.board;
 
-import com.syncboard.syncboard_api.board.dto.GetBoardByIdResponse;
-import com.syncboard.syncboard_api.board.dto.GetBoardsResponse;
-import com.syncboard.syncboard_api.board.dto.CreateBoardRequest;
-import com.syncboard.syncboard_api.board.dto.CreateBoardResponse;
+import com.syncboard.syncboard_api.board.dto.*;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,4 +33,15 @@ public class BoardController {
     public ResponseEntity<GetBoardByIdResponse> getBoardById(@PathVariable Long boardId) {
         return ResponseEntity.ok(boardService.getBoardById(boardId));
     }
+
+    @GetMapping("/{boardId}/state")
+    public ResponseEntity<GetBoardStateResponse> getBoardState(@PathVariable Long boardId) {
+        return ResponseEntity.ok(boardService.getBoardState(boardId));
+    }
+
+    @PutMapping("/{boardId}/state")
+    public ResponseEntity<GetBoardStateResponse> updateBoardState(@PathVariable Long boardId, @RequestBody UpdateBoardStateRequest request){
+        return ResponseEntity.ok(boardService.updateBoardState(boardId, request.getState()));
+    }
+
 }

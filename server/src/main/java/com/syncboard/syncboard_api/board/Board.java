@@ -26,6 +26,9 @@ public class Board {
     @Column(nullable = false)
     UUID ownerId;
 
+    @Column(nullable = false, columnDefinition = "TEXT")
+    String state = "{\"version\":1,\"elements\":[]}";
+
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt = LocalDateTime.now();
 

@@ -1,9 +1,6 @@
 package com.syncboard.syncboard_api.board;
 
-import com.syncboard.syncboard_api.board.dto.GetBoardByIdResponse;
-import com.syncboard.syncboard_api.board.dto.GetBoardStateResponse;
-import com.syncboard.syncboard_api.board.dto.GetBoardsResponse;
-import com.syncboard.syncboard_api.board.dto.CreateBoardResponse;
+import com.syncboard.syncboard_api.board.dto.*;
 import com.syncboard.syncboard_api.user.User;
 import com.syncboard.syncboard_api.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +66,46 @@ public class BoardService {
     }
 
     public GetBoardStateResponse getBoardState(Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = (String) auth.getPrincipal();
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Board not found"));
+
+        return new GetBoardStateResponse(board.getState());
+    }
+
+    public GetBoardStateResponse updateBoardState(Long boardId, String newState){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = (String) auth.getPrincipal();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("Board not found"));
+
+
+
+        if (!board.getOwnerId().equals(user.getId())){
+            throw new RuntimeException("Unauthorized");
+        }
+
+        if(newState == null || newState.isEmpty()){
+            throw new RuntimeException("State cannot be empty");
+        }
+
+
+        board.setState(newState);
+        boardRepository.save(board);
+
+        //create res
+        GetBoardStateResponse res = new GetBoardStateResponse();
+        res.setState(board.getState());
+        return res;
     }
 }
